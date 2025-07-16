@@ -1,23 +1,16 @@
 import React from 'react';
-import { Calendar, User, ArrowRight } from 'lucide-react';
+import { Calendar, User, ArrowRight, Heart, Eye, MessageCircle } from 'lucide-react';
+import { News } from '../types';
 
-interface News {
-  id: number;
-  title: string;
-  excerpt: string;
-  category: string;
-  image: string;
-  date: string;
-  author: string;
-  featured?: boolean;
-}
 
 interface NewsCardProps {
   news: News;
   featured?: boolean;
+  onLike?: (id: number) => void;
+  onComment?: (id: number) => void;
 }
 
-const NewsCard: React.FC<NewsCardProps> = ({ news, featured = false }) => {
+const NewsCard: React.FC<NewsCardProps> = ({ news, featured = false, onLike, onComment }) => {
   if (featured) {
     return (
       <div className="group relative overflow-hidden rounded-2xl glass neon-glow transition-all duration-500 hover:scale-[1.02] fade-in">
@@ -48,12 +41,27 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, featured = false }) => {
               <User className="w-4 h-4 mr-1" />
               <span className="khmer-text">{news.author}</span>
             </div>
+            <div className="flex items-center space-x-4 text-gray-300 text-sm">
+              <div className="flex items-center space-x-1">
+                <Eye className="w-4 h-4" />
+                <span>{news.views}</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Heart className="w-4 h-4" />
+                <span>{news.likes}</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <MessageCircle className="w-4 h-4" />
+                <span>{news.comments.length}</span>
+              </div>
+            </div>
+          </div>
+          <div className="mt-4">
             <button className="flex items-center space-x-2 text-indigo-400 hover:text-indigo-300 transition-colors">
               <span className="khmer-text">អានបន្ត</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </button>
           </div>
-        </div>
       </div>
     );
   }
@@ -93,10 +101,33 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, featured = false }) => {
           {news.excerpt}
         </p>
         
-        <button className="flex items-center space-x-2 text-indigo-400 hover:text-indigo-300 transition-colors group">
-          <span className="khmer-text">អានបន្ត</span>
-          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-        </button>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4 text-gray-400 text-sm">
+            <div className="flex items-center space-x-1">
+              <Eye className="w-4 h-4" />
+              <span>{news.views}</span>
+            </div>
+            <button
+              onClick={() => onLike?.(news.id)}
+              className="flex items-center space-x-1 hover:text-red-400 transition-colors"
+            >
+              <Heart className="w-4 h-4" />
+              <span>{news.likes}</span>
+            </button>
+            <button
+              onClick={() => onComment?.(news.id)}
+              className="flex items-center space-x-1 hover:text-indigo-400 transition-colors"
+            >
+              <MessageCircle className="w-4 h-4" />
+              <span>{news.comments.length}</span>
+            </button>
+          </div>
+          
+          <button className="flex items-center space-x-2 text-indigo-400 hover:text-indigo-300 transition-colors group">
+            <span className="khmer-text">អានបន្ត</span>
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+          </button>
+        </div>
       </div>
     </article>
   );

@@ -1,47 +1,143 @@
 import React, { useState, useMemo } from 'react';
+import { Toaster } from 'react-hot-toast';
 import Header from './components/Header';
 import CategoryTabs from './components/CategoryTabs';
 import NewsCard from './components/NewsCard';
 import HeroSection from './components/HeroSection';
 import Footer from './components/Footer';
 import FloatingElements from './components/FloatingElements';
-import { mockNews } from './data/mockNews';
+import CommentSystem from './components/CommentSystem';
+import AdminPanel from './components/AdminPanel';
+import { mockNews } from './data/mockData';
+import { News, Comment } from './types';
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [showAdmin, setShowAdmin] = useState(false);
+  const [selectedNews, setSelectedNews] = useState<News | null>(null);
+  const [news, setNews] = useState<News[]>(mockNews);
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
     document.documentElement.classList.toggle('light', !darkMode);
   };
 
-  const featuredNews = mockNews.filter(news => news.featured);
+  const handleLike = (newsId: number) => {
+    setNews(prevNews => 
+      prevNews.map(item => 
+        item.id === newsId 
+          ? { ...item, likes: item.likes + 1 }
+          : item
+      )
+    );
+  };
+
+  const handleComment = (newsId: number) => {
+    const newsItem = news.find(item => item.id === newsId);
+    if (newsItem) {
+      setSelectedNews(newsItem);
+    }
+  };
+
+  const handleAddComment = (comment: Omit<Comment, 'id' | 'date' | 'likes'>) => {
+    const newComment: Comment = {
+      ...comment,
+      id: Date.now(),
+      date: new Date().toLocaleDateString('km-KH'),
+      likes: 0
+    };
+
+    setNews(prevNews => 
+      prevNews.map(item => 
+        item.id === comment.newsId 
+          ? { ...item, comments: [...item.comments, newComment] }
+          : item
+      )
+    );
+  };
+
+  const handleLikeComment = (commentId: number) => {
+    if (selectedNews) {
+      const updatedComments = selectedNews.comments.map(comment =>
+        comment.id === commentId
+          ? { ...comment, likes: comment.likes + 1 }
+          : comment
+      );
+      setSelectedNews({ ...selectedNews, comments: updatedComments });
+    }
+  };
+
+  const featuredNews = news.filter(item => item.featured);
   
   const filteredNews = useMemo(() => {
-    return mockNews.filter(news => {
+    return news.filter(item => {
       const matchesCategory = activeCategory === 'all' || 
-        (activeCategory === 'politics' && news.category === 'នយោបាយ') ||
-        (activeCategory === 'technology' && news.category === 'បច្ចេកវិទ្យា') ||
-        (activeCategory === 'sports' && news.category === 'កីឡា') ||
-        (activeCategory === 'business' && news.category === 'អាជីវកម្ម') ||
-        (activeCategory === 'entertainment' && news.category === 'កម្សាន្ត') ||
-        (activeCategory === 'health' && news.category === 'សុខភាព');
+        (activeCategory === 'politics' && item.category === 'នយោបាយ') ||
+        (activeCategory === 'technology' && item.category === 'បច្ចេកវិទ្យា') ||
+        (activeCategory === 'sports' && item.category === 'កីឡា') ||
+        (activeCategory === 'business' && item.category === 'អាជីវកម្ម') ||
+        (activeCategory === 'entertainment' && item.category === 'កម្សាន្ត') ||
+        (activeCategory === 'health' && item.category === 'សុខភាព');
 
       const matchesSearch = searchTerm === '' || 
-        news.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        news.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        news.category.toLowerCase().includes(searchTerm.toLowerCase());
+        item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.category.toLowerCase().includes(searchTerm.toLowerCase());
 
       return matchesCategory && matchesSearch;
     });
-  }, [activeCategory, searchTerm]);
+  }, [activeCategory, searchTerm, news]);
 
   React.useEffect(() => {
     document.documentElement.classList.toggle('light', !darkMode);
   }, [darkMode]);
 
+  // Admin Panel
+  if (showAdmin) {
+    return <AdminPanel />;
+  }
+
+  // Comment Modal
+  if (selectedNews) {
+    return (
+      <div className="min-h-screen bg-slate-900 text-white">
+        <div className="max-w-4xl mx-auto px-4 py-8">
+          <button
+            onClick={() => setSelectedNews(null)}
+            className="mb-6 px-4 py-2 glass rounded-lg hover:bg-white/10 khmer-text"
+          >
+            ← ត្រលប់ទៅវិញ
+          </button>
+          
+          <div className="glass rounded-xl p-6 mb-8">
+            <img
+              src={selectedNews.image}
+              alt={selectedNews.title}
+              className="w-full h-64 object-cover rounded-lg mb-6"
+            />
+            <h1 className="text-2xl font-bold khmer-text mb-4">{selectedNews.title}</h1>
+            <p className="text-gray-300 khmer-text leading-relaxed mb-6">{selectedNews.content}</p>
+            <div className="flex items-center space-x-4 text-sm text-gray-400">
+              <span className="khmer-text">{selectedNews.author}</span>
+              <span>{selectedNews.date}</span>
+              <span>{selectedNews.views} views</span>
+              <span>{selectedNews.likes} likes</span>
+            </div>
+          </div>
+
+          <CommentSystem
+            newsId={selectedNews.id}
+            comments={selectedNews.comments}
+            onAddComment={handleAddComment}
+            onLikeComment={handleLikeComment}
+          />
+        </div>
+        <Toaster position="top-right" />
+      </div>
+    );
+  }
   return (
     <div className={`min-h-screen transition-all duration-300 ${darkMode ? '' : 'light'}`}>
       {/* Background Elements */}
@@ -57,6 +153,7 @@ function App() {
           toggleDarkMode={toggleDarkMode}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
+          onAdminClick={() => setShowAdmin(true)}
         />
 
         <CategoryTabs 
@@ -100,7 +197,11 @@ function App() {
                     key={news.id}
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <NewsCard news={news} />
+                    <NewsCard 
+                      news={news} 
+                      onLike={handleLike}
+                      onComment={handleComment}
+                    />
                   </div>
                 ))}
               </div>
@@ -111,6 +212,7 @@ function App() {
         <Footer />
         <FloatingElements />
       </div>
+      <Toaster position="top-right" />
     </div>
   );
 }
