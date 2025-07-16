@@ -3,6 +3,7 @@ import AdminLayout from './admin/AdminLayout';
 import Dashboard from './admin/Dashboard';
 import ArticleManager from './admin/ArticleManager';
 import RSSManager from './admin/RSSManager';
+import ContentInsights from './admin/ContentInsights';
 
 const AdminPanel: React.FC = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -20,7 +21,7 @@ const AdminPanel: React.FC = () => {
       case 'rss':
         return <RSSManager />;
       case 'analytics':
-        return <div className="text-center py-12 khmer-text">មុខងារស្ថិតិនឹងមកដល់ឆាប់ៗនេះ</div>;
+        return <ContentInsights />;
       case 'settings':
         return <div className="text-center py-12 khmer-text">មុខងារការកំណត់នឹងមកដល់ឆាប់ៗនេះ</div>;
       default:

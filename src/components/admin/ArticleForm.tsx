@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { XMarkIcon, PhotoIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, PhotoIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import { mockCategories } from '../../data/mockData';
 import { News } from '../../types';
+import AIAssistant from './AIAssistant';
 
 interface ArticleFormProps {
   article?: News | null;
@@ -20,6 +21,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSave, onCancel }) 
     featured: false,
     status: 'draft' as 'draft' | 'published' | 'archived'
   });
+  const [showAI, setShowAI] = useState(false);
 
   useEffect(() => {
     if (article) {
@@ -41,6 +43,14 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSave, onCancel }) 
     onSave(formData);
   };
 
+  const handleAISummary = (summary: string) => {
+    setFormData({ ...formData, excerpt: summary });
+  };
+
+  const handleAITranslation = (translation: string) => {
+    setFormData({ ...formData, content: translation });
+  };
+
   return (
     <div className="max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-6">
@@ -54,6 +64,32 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSave, onCancel }) 
           <XMarkIcon className="w-6 h-6" />
         </button>
       </div>
+
+      {/* AI Assistant Toggle */}
+      <div className="mb-6">
+        <button
+          onClick={() => setShowAI(!showAI)}
+          className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
+            showAI 
+              ? 'bg-gradient-to-r from-indigo-500 to-cyan-500 text-white' 
+              : 'glass hover:bg-white/10'
+          }`}
+        >
+          <SparklesIcon className="w-5 h-5" />
+          <span className="khmer-text">AI Assistant</span>
+        </button>
+      </div>
+
+      {/* AI Assistant Panel */}
+      {showAI && (
+        <div className="mb-6">
+          <AIAssistant
+            content={formData.content}
+            onSummaryGenerated={handleAISummary}
+            onTranslationGenerated={handleAITranslation}
+          />
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="glass rounded-xl p-6 space-y-6">

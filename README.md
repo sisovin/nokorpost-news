@@ -6,6 +6,13 @@ A stunning, modern, and futuristic Khmer Unicode news website. Nokorpost News de
 
 ## 🚀 Key Features
 
+### 🤖 AI-Powered Content Processing
+- **Khmer Content Summarization:** Intelligent summarization using DeepSeek R1 model via Ollama
+- **Real-time Translation:** Bidirectional Khmer ↔ English translation
+- **Content Analysis:** Readability scoring, topic extraction, and sentiment analysis
+- **Article Suggestions:** AI-generated article ideas based on trending topics
+- **Content Insights:** Advanced analytics with AI-powered readability metrics
+
 ### 🌌 Modern Futuristic Design
 - **Glassmorphism Effects:** Semi-transparent cards and containers with blur and layered depth.
 - **Gradient Backgrounds:** Lively, multi-hued gradients throughout the site for a dynamic feel.
@@ -48,6 +55,8 @@ A stunning, modern, and futuristic Khmer Unicode news website. Nokorpost News de
 - **Noto Sans Khmer** (web fonts)
 - **Vite / Next.js** (edit if different) for fast build and HMR
 - **Framer Motion** or CSS animation libraries for smooth transitions
+- **Ollama + DeepSeek R1** for AI-powered content processing
+- **Axios** for API communication
 
 ---
 
@@ -58,6 +67,25 @@ A stunning, modern, and futuristic Khmer Unicode news website. Nokorpost News de
 ---
 
 ## ✨ Getting Started
+
+### Prerequisites
+
+1. **Install Ollama** (for AI features):
+    ```bash
+    curl -fsSL https://ollama.ai/install.sh | sh
+    ```
+
+2. **Pull DeepSeek R1 Model**:
+    ```bash
+    ollama pull deepseek-r1
+    ```
+
+3. **Start Ollama Service**:
+    ```bash
+    ollama serve
+    ```
+
+### Installation
 
 1. **Clone the Repository**
     ```bash
@@ -81,10 +109,18 @@ A stunning, modern, and futuristic Khmer Unicode news website. Nokorpost News de
 
 4. **Open in Browser**
     - Visit [http://localhost:3000](http://localhost:3000)
+    - Access Admin Panel via the settings icon in the header
+    - AI features will be available if Ollama is running
 
 ---
 
 ## ⚙️ Configuration
+
+### AI Configuration
+- **Ollama URL:** Default `http://localhost:11434`
+- **Model:** DeepSeek R1 (`deepseek-r1:latest`)
+- **Features:** Auto-detection of AI service availability
+- **Fallbacks:** Graceful degradation when AI is unavailable
 
 - **Fonts:** Noto Sans Khmer is loaded globally via CSS or imported in the main layout.
 - **Theming:** Easily adjust gradients, neon colors, and glassmorphism intensity in the theme file.
@@ -93,6 +129,12 @@ A stunning, modern, and futuristic Khmer Unicode news website. Nokorpost News de
 ---
 
 ## 🛠️ Customization
+
+### AI Features
+- **Model Selection:** Change model in `src/services/aiService.ts`
+- **Prompt Engineering:** Customize prompts for better Khmer language processing
+- **API Endpoints:** Configure Ollama connection settings
+- **Fallback Behavior:** Customize offline functionality
 
 - **Change Colors:** Edit the theme config for different neon/glassmorphism palettes.
 - **Add Categories:** Update the category list in the data or CMS.
@@ -135,6 +177,12 @@ All content, navigation, search, and UI elements have full Khmer Unicode support
 
 Pull requests, issue reports, and feature suggestions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
+### AI Development
+- Test with different Ollama models
+- Improve Khmer language processing
+- Add new AI-powered features
+- Optimize prompt engineering
+
 ---
 
 ## 📄 License
@@ -145,6 +193,8 @@ Pull requests, issue reports, and feature suggestions are welcome! See [CONTRIBU
 
 ## 🙏 Acknowledgements
 
+- [Ollama](https://ollama.ai/) for local AI model serving
+- [DeepSeek R1](https://github.com/deepseek-ai/DeepSeek-R1) for advanced language processing
 - [Noto Sans Khmer](https://fonts.google.com/specimen/Noto+Sans+Khmer)
 - [Glassmorphism Inspiration](https://glassmorphism.com/)
 - [Neon UI Inspiration](https://dribbble.com/tags/neon)
