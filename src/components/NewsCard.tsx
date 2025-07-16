@@ -134,3 +134,6 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, featured = false, onLike, onC
 };
 
 export default NewsCard;
+    )
+  }
+}
