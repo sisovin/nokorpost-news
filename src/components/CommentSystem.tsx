@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HeartIcon, ReplyIcon, UserIcon } from '@heroicons/react/24/outline';
+import { HeartIcon, ArrowUturnLeftIcon, UserIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
 import { Comment } from '../types';
 
@@ -10,11 +10,11 @@ interface CommentSystemProps {
   onLikeComment: (commentId: number) => void;
 }
 
-const CommentSystem: React.FC<CommentSystemProps> = ({ 
-  newsId, 
-  comments, 
-  onAddComment, 
-  onLikeComment 
+const CommentSystem: React.FC<CommentSystemProps> = ({
+  newsId,
+  comments,
+  onAddComment,
+  onLikeComment
 }) => {
   const [newComment, setNewComment] = useState('');
   const [authorName, setAuthorName] = useState('');
@@ -96,11 +96,10 @@ const CommentSystem: React.FC<CommentSystemProps> = ({
                 <div className="flex items-center space-x-4">
                   <button
                     onClick={() => handleLike(comment.id)}
-                    className={`flex items-center space-x-1 px-3 py-1 rounded-lg transition-all ${
-                      likedComments.has(comment.id)
+                    className={`flex items-center space-x-1 px-3 py-1 rounded-lg transition-all ${likedComments.has(comment.id)
                         ? 'bg-red-500/20 text-red-400'
                         : 'glass hover:bg-white/10'
-                    }`}
+                      }`}
                   >
                     {likedComments.has(comment.id) ? (
                       <HeartSolidIcon className="w-4 h-4" />
@@ -110,7 +109,7 @@ const CommentSystem: React.FC<CommentSystemProps> = ({
                     <span>{comment.likes + (likedComments.has(comment.id) ? 1 : 0)}</span>
                   </button>
                   <button className="flex items-center space-x-1 px-3 py-1 glass rounded-lg hover:bg-white/10 transition-all">
-                    <ReplyIcon className="w-4 h-4" />
+                    <ArrowUturnLeftIcon className="w-4 h-4" />
                     <span className="khmer-text">ឆ្លើយតប</span>
                   </button>
                 </div>

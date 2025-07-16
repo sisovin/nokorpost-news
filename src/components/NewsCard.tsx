@@ -62,6 +62,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, featured = false, onLike, onC
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </button>
           </div>
+        </div>
       </div>
     );
   }
@@ -80,7 +81,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, featured = false, onLike, onC
           </span>
         </div>
       </div>
-      
+
       <div className="p-6">
         <div className="flex items-center space-x-4 mb-3 text-sm text-gray-400">
           <div className="flex items-center">
@@ -92,15 +93,15 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, featured = false, onLike, onC
             <span className="khmer-text">{news.author}</span>
           </div>
         </div>
-        
+
         <h3 className="text-lg font-semibold mb-3 khmer-text leading-relaxed group-hover:text-indigo-400 transition-colors">
           {news.title}
         </h3>
-        
+
         <p className="text-gray-400 text-sm mb-4 khmer-text line-clamp-3 leading-relaxed">
           {news.excerpt}
         </p>
-        
+
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4 text-gray-400 text-sm">
             <div className="flex items-center space-x-1">
@@ -122,7 +123,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, featured = false, onLike, onC
               <span>{news.comments.length}</span>
             </button>
           </div>
-          
+
           <button className="flex items-center space-x-2 text-indigo-400 hover:text-indigo-300 transition-colors group">
             <span className="khmer-text">អានបន្ត</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -134,6 +135,3 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, featured = false, onLike, onC
 };
 
 export default NewsCard;
-    )
-  }
-}

@@ -1,10 +1,10 @@
 import React from 'react';
-import { 
-  DocumentTextIcon, 
-  UsersIcon, 
-  EyeIcon, 
+import {
+  DocumentTextIcon,
+  UsersIcon,
+  EyeIcon,
   HeartIcon,
-  TrendingUpIcon,
+  ArrowTrendingUpIcon,
   ChatBubbleLeftIcon
 } from '@heroicons/react/24/outline';
 import { mockNews, mockUsers } from '../../data/mockData';
@@ -61,7 +61,7 @@ const Dashboard: React.FC = () => {
                 <p className="text-sm text-gray-400 khmer-text">{stat.name}</p>
                 <p className="text-2xl font-bold">{stat.value.toLocaleString()}</p>
                 <div className="flex items-center space-x-1 mt-1">
-                  <TrendingUpIcon className="w-4 h-4 text-green-400" />
+                  <ArrowTrendingUpIcon className="w-4 h-4 text-green-400" />
                   <span className="text-sm text-green-400">{stat.change}</span>
                 </div>
               </div>
@@ -103,11 +103,10 @@ const Dashboard: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <span className={`px-2 py-1 rounded-full text-xs ${
-                article.status === 'published' ? 'bg-green-500/20 text-green-400' :
-                article.status === 'draft' ? 'bg-yellow-500/20 text-yellow-400' :
-                'bg-gray-500/20 text-gray-400'
-              }`}>
+              <span className={`px-2 py-1 rounded-full text-xs ${article.status === 'published' ? 'bg-green-500/20 text-green-400' :
+                  article.status === 'draft' ? 'bg-yellow-500/20 text-yellow-400' :
+                    'bg-gray-500/20 text-gray-400'
+                }`}>
                 {article.status}
               </span>
             </div>

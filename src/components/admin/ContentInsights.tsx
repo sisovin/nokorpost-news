@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  ChartBarIcon, 
-  EyeIcon, 
-  HeartIcon, 
+import {
+  EyeIcon,
+  HeartIcon,
   ChatBubbleLeftIcon,
-  TrendingUpIcon,
-  TrendingDownIcon,
+  ArrowTrendingUpIcon,
+  ArrowTrendingDownIcon,
   ClockIcon,
   UserGroupIcon
 } from '@heroicons/react/24/outline';
@@ -33,12 +32,12 @@ const ContentInsights: React.FC = () => {
 
   const generateInsights = async () => {
     setIsLoading(true);
-    
+
     // Calculate basic metrics from mock data
     const totalViews = mockNews.reduce((sum, news) => sum + news.views, 0);
     const totalLikes = mockNews.reduce((sum, news) => sum + news.likes, 0);
     const totalComments = mockNews.reduce((sum, news) => sum + news.comments.length, 0);
-    
+
     // Category analysis
     const categoryStats = mockNews.reduce((acc, news) => {
       acc[news.category] = (acc[news.category] || 0) + 1;
@@ -54,7 +53,7 @@ const ContentInsights: React.FC = () => {
       .sort((a, b) => b.count - a.count);
 
     // AI-powered content analysis (if available)
-    let readabilityScores: { category: string; score: number }[] = [];
+    const readabilityScores: { category: string; score: number }[] = [];
     try {
       const isAIAvailable = await aiService.checkConnection();
       if (isAIAvailable) {
@@ -108,6 +107,7 @@ const ContentInsights: React.FC = () => {
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold khmer-text">ការវិភាគមាតិកា</h2>
         <select
+          aria-label="ជ្រើសរយៈពេល" // Khmer: Select time range
           value={timeRange}
           onChange={(e) => setTimeRange(e.target.value)}
           className="px-3 py-1 glass rounded border border-white/10 focus:border-indigo-500 focus:outline-none"
@@ -175,13 +175,12 @@ const ContentInsights: React.FC = () => {
               </div>
               <div className="flex items-center space-x-4">
                 <span className="text-gray-400">{category.count} អត្ថបទ</span>
-                <div className={`flex items-center space-x-1 ${
-                  category.growth > 0 ? 'text-green-400' : 'text-red-400'
-                }`}>
+                <div className={`flex items-center space-x-1 ${category.growth > 0 ? 'text-green-400' : 'text-red-400'
+                  }`}>
                   {category.growth > 0 ? (
-                    <TrendingUpIcon className="w-4 h-4" />
+                    <ArrowTrendingUpIcon className="w-4 h-4" />
                   ) : (
-                    <TrendingDownIcon className="w-4 h-4" />
+                    <ArrowTrendingDownIcon className="w-4 h-4" />
                   )}
                   <span className="text-sm">{Math.abs(category.growth)}%</span>
                 </div>
@@ -199,11 +198,10 @@ const ContentInsights: React.FC = () => {
             <div key={index} className="p-4 glass rounded-lg">
               <div className="flex items-center justify-between mb-2">
                 <h4 className="font-medium khmer-text">{trend.topic}</h4>
-                <span className={`px-2 py-1 rounded-full text-xs ${
-                  trend.sentiment === 'positive' ? 'bg-green-500/20 text-green-400' :
+                <span className={`px-2 py-1 rounded-full text-xs ${trend.sentiment === 'positive' ? 'bg-green-500/20 text-green-400' :
                   trend.sentiment === 'negative' ? 'bg-red-500/20 text-red-400' :
-                  'bg-gray-500/20 text-gray-400'
-                }`}>
+                    'bg-gray-500/20 text-gray-400'
+                  }`}>
                   {trend.sentiment}
                 </span>
               </div>
@@ -225,21 +223,19 @@ const ContentInsights: React.FC = () => {
               <div key={index} className="p-4 glass rounded-lg">
                 <div className="flex items-center justify-between mb-2">
                   <span className="khmer-text font-medium">{score.category}</span>
-                  <span className={`text-lg font-bold ${
-                    score.score >= 8 ? 'text-green-400' :
+                  <span className={`text-lg font-bold ${score.score >= 8 ? 'text-green-400' :
                     score.score >= 6 ? 'text-yellow-400' :
-                    'text-red-400'
-                  }`}>
+                      'text-red-400'
+                    }`}>
                     {score.score}/10
                   </span>
                 </div>
                 <div className="w-full bg-gray-700 rounded-full h-2">
                   <div
-                    className={`h-2 rounded-full ${
-                      score.score >= 8 ? 'bg-green-400' :
+                    className={`h-2 rounded-full ${score.score >= 8 ? 'bg-green-400' :
                       score.score >= 6 ? 'bg-yellow-400' :
-                      'bg-red-400'
-                    }`}
+                        'bg-red-400'
+                      }`}
                     style={{ width: `${score.score * 10}%` }}
                   />
                 </div>
